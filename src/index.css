@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+.login-wrapper {
+  background:
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.3) 20%),
+    url("../src/assets/movie-list.jpg");
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+}

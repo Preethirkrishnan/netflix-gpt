@@ -1,12 +1,10 @@
-import { useNavigate } from "react-router-dom";
 import logo from "../assets/Netflix_Logo_PMS.png";
-import { auth } from "../utils/firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { signOut } from "firebase/auth";
 import { removeUser } from "../redux/slices/userSlice";
+import {auth} from "../utils/firebase";
 
 const Header = () => {
-  const navigate = useNavigate();
   const user = useSelector((store) => store.user);
   const dispatch = useDispatch();
 
@@ -14,7 +12,6 @@ const Header = () => {
     try {
       await signOut(auth);
       dispatch(removeUser());
-      navigate("/");
     } catch (error) {
       console.log(error);
     }

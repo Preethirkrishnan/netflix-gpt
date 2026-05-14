@@ -7,7 +7,6 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { auth } from "../utils/firebase";
-import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addUser, removeUser } from "../redux/slices/userSlice";
 import profileImg from "../assets/profile.png";
@@ -16,7 +15,7 @@ import { signInUser, signUpUser } from "../utils/authService";
 const Login = () => {
   const [isSignInForm, setIsSignInForm] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
-  const navigate = useNavigate();
+  const [loader, setLoader] = useState(false);
   const dispatch = useDispatch();
 
   const name = useRef(null);
@@ -24,6 +23,7 @@ const Login = () => {
   const password = useRef(null);
 
   const handleSubmit = async () => {
+    setLoader(true);
     try {
       const message = validateData(email.current.value, password.current.value);
       if (message) {
@@ -43,16 +43,18 @@ const Login = () => {
         user = await signInUser(email.current.value, password.current.value);
       }
 
-      dispatch(addUser({
-        uid: user.uid,
-        email: user.email,
-        displayName: user.displayName,
-        photoURL: user.photoURL,
-      }));
-
-      navigate("/browse");
+      dispatch(
+        addUser({
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName,
+          photoURL: user.photoURL,
+        }),
+      );
     } catch (error) {
       setErrorMessage(error.code + "-" + error.message);
+    } finally {
+      setLoader(false);
     }
   };
 
@@ -66,33 +68,36 @@ const Login = () => {
           {isSignInForm ? "Sign In" : "Sign Up"}
         </div>
         <form onSubmit={(e) => e.preventDefault()}>
-          {!isSignInForm && (
+          <fieldset disabled={loader}>
+            {!isSignInForm && (
+              <input
+                ref={name}
+                type="text"
+                className="p-4 bg-gray-900 w-full rounded mb-8"
+                placeholder="Full Name"
+              />
+            )}
             <input
-              ref={name}
-              type="text"
+              ref={email}
+              type="email"
               className="p-4 bg-gray-900 w-full rounded mb-8"
-              placeholder="Full Name"
+              placeholder="Email"
             />
-          )}
-          <input
-            ref={email}
-            type="email"
-            className="p-4 bg-gray-900 w-full rounded mb-8"
-            placeholder="Email"
-          />
-          <input
-            ref={password}
-            type="password"
-            className="p-4 bg-gray-900 w-full rounded mb-10"
-            placeholder="Password"
-          />
-          <div className="text-red-500 font-bold mb-5">{errorMessage}</div>
-          <button
-            className="bg-red-700 text-white p-2 w-full rounded cursor-pointer hover:bg-red-800"
-            onClick={handleSubmit}
-          >
-            {isSignInForm ? "Sign In" : "Sign Up"}
-          </button>
+            <input
+              ref={password}
+              type="password"
+              className="p-4 bg-gray-900 w-full rounded mb-10"
+              placeholder="Password"
+            />
+            <div className="text-red-500 font-bold mb-5">{errorMessage}</div>
+            <button
+              className="bg-red-700 text-white p-2 w-full rounded cursor-pointer hover:bg-red-800 disabled:cursor-not-allowed"
+              onClick={handleSubmit}
+            >
+              {loader ? "Loading..." : isSignInForm ? "Sign In" : "Sign Up"}
+            </button>
+          </fieldset>
+
           <div className="text-center mt-8">
             {isSignInForm ? "New to Netflix?" : "Already Registered?"}{" "}
             <a

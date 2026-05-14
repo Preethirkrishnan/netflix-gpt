@@ -1,45 +1,36 @@
-import { createBrowserRouter, RouterProvider, useNavigate } from "react-router-dom";
-import Login from "./Login";
-import Browse from "./Browse";
-import { auth } from "../utils/firebase";
-import { onAuthStateChanged } from "firebase/auth";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { addUser, removeUser } from "../redux/slices/userSlice";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Login from "../pages/Login";
+import Layout from "../layout/Layout";
+import Browse from "../pages/Browse";
+import PublicRoute from "../components/PublicRoute";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 const Body = () => {
-  const dispatch = useDispatch();
-
   const appRouter = createBrowserRouter([
     {
       path: "/",
-      element: <Login />,
-    },
-    {
-      path: "/browse",
-      element: <Browse />,
+      element: <Layout />,
+      children: [
+        {
+          index: true,
+          element: (
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          ),
+        },
+        {
+          element: <ProtectedRoute />,
+          children: [
+            {
+              path: "/browse",
+              element: <Browse />,
+            }
+          ]
+        },
+      ],
     },
   ]);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        const { uid, email, displayName, photoURL } = user;
-        dispatch(
-          addUser({
-            uid: uid,
-            email: email,
-            displayName: displayName,
-            photoURL: photoURL,
-          }),
-        );
-      } else {
-        dispatch(removeUser());
-      }
-    });
-
-    return () => unsubscribe();
-  }, []);
 
   return <RouterProvider router={appRouter}></RouterProvider>;
 };

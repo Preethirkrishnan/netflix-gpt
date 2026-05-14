@@ -10,7 +10,8 @@
 - Deploying our app to production
 - Sign up & sign in form api call completed
 - Redux store created
-- 
+- User stored and fetched after sign in
+
 
 #Features
 - Login/Sign Up

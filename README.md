@@ -8,7 +8,9 @@
 - useRef Hook
 - Firebase setup
 - Deploying our app to production
-
+- Sign up & sign in form api call completed
+- Redux store created
+- 
 
 #Features
 - Login/Sign Up

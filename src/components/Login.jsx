@@ -4,51 +4,55 @@ import { validateData } from "../utils/validation";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  updateProfile,
 } from "firebase/auth";
 import { auth } from "../utils/firebase";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addUser, removeUser } from "../redux/slices/userSlice";
+import profileImg from "../assets/profile.png";
+import { signInUser, signUpUser } from "../utils/authService";
 
 const Login = () => {
   const [isSignInForm, setIsSignInForm] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const name = useRef(null);
   const email = useRef(null);
   const password = useRef(null);
 
-  const handleSubmit = () => {
-    const message = validateData(
-      email.current.value,
-      password.current.value,
-    );
-    setErrorMessage(message);
-    if (message) return;
+  const handleSubmit = async () => {
+    try {
+      const message = validateData(email.current.value, password.current.value);
+      if (message) {
+        setErrorMessage(message);
+        return;
+      }
 
-    if (!isSignInForm) {
-      createUserWithEmailAndPassword(
-        auth,
-        email.current.value,
-        password.current.value,
-      )
-        .then((userCredential) => {
-          const user = userCredential.user;
-          console.log(user);
-        })
-        .catch((error) => {
-          setErrorMessage(error.code + "-" + error.message);
-        });
-    } else {
-      signInWithEmailAndPassword(
-        auth,
-        email.current.value,
-        password.current.value,
-      )
-        .then((userCredential) => {
-          const user = userCredential.user;
-          console.log(user);
-        })
-        .catch((error) => {
-          setErrorMessage(error.code + "-" + error.message);
-        });
+      let user;
+      if (!isSignInForm) {
+        user = await signUpUser(
+          name.current.value,
+          email.current.value,
+          password.current.value,
+          profileImg,
+        );
+      } else {
+        user = await signInUser(email.current.value, password.current.value);
+      }
+
+      dispatch(addUser({
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName,
+        photoURL: user.photoURL,
+      }));
+
+      navigate("/browse");
+    } catch (error) {
+      setErrorMessage(error.code + "-" + error.message);
     }
   };
 

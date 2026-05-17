@@ -1,7 +1,13 @@
+import { useEffect } from "react";
+import useNowPlayingMovies from "../hooks/useNowPlayingMovies";
+import MainContainer from "./MainContainer";
+
 const Browse = () => {
+    useNowPlayingMovies();
+
     return(
         <div>
-            <h1>Browse</h1>
+            <MainContainer />
         </div>
     )
 }

@@ -9,7 +9,6 @@ const dispatch = useDispatch();
     try {
       const data = await fetch("https://api.tvmaze.com/shows");
       const json = await data.json();
-      console.log(json);
       dispatch(addNowPlayingMovies(json));
     } catch (error) {
       console.log(error.message);

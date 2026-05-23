@@ -59,7 +59,7 @@ const Login = () => {
   };
 
   return (
-    <div className="login-wrapper">
+    <div className="image-wrapper">
       <div className="img-wrapper py-2 px-30">
         <img src={logo} alt="logo" className="w-50" />
       </div>

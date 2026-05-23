@@ -6,11 +6,8 @@ const SecondaryContainer = () => {
   const movies = useSelector((store) => store.movies);
 
   if (movies === null) return;
-  console.log(movies);
 
   const movieType = movies?.nowPlayingMovies?.map((movie) => movie.type);
-
-  console.log([...new Set(movieType)]);
 
   const realityMovies = movies?.nowPlayingMovies?.filter(
     (movie) => movie.type === "Reality",
@@ -18,8 +15,6 @@ const SecondaryContainer = () => {
   const animationMovies = movies?.nowPlayingMovies?.filter(
     (movie) => movie.type === "Animation",
   );
-
-  console.log(realityMovies, animationMovies);
 
   return (
     <div className="bg-black pb-10">

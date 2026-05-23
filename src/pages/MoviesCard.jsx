@@ -1,7 +1,6 @@
 import React from 'react'
 
 const MoviesCard = ({image}) => {
-    console.log(image);
   return (
     <div className='shrink-0'>
         <img src={image.medium} className='w-40' />
@@ -9,4 +8,4 @@ const MoviesCard = ({image}) => {
   )
 }
 
-export default MoviesCard
+export default MoviesCard;

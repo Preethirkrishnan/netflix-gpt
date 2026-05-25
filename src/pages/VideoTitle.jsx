@@ -1,8 +1,11 @@
 import React from "react";
 import { FaPlay } from "react-icons/fa";
 import { FaInfoCircle } from "react-icons/fa";
+import useLanguage from "../hooks/useLanguage";
 
 const VideoTitle = ({ title, summary }) => {
+  const language = useLanguage();
+
   return (
     <div className="pl-14 w-1/2 z-10 absolute top-3/12 text-white">
       <h1 className="text-2xl font-bold mb-5">{title}</h1>
@@ -10,11 +13,11 @@ const VideoTitle = ({ title, summary }) => {
       <div className="flex">
         <button className="rounded py-2 px-4 bg-white text-black flex items-center gap-2 mr-2 cursor-pointer hover:bg-gray-200">
           <FaPlay />
-          Play
+          {language.play}
         </button>
         <button className="rounded py-2 px-4 bg-gray-500 flex items-center gap-2 cursor-pointer hover:bg-gray-600">
           <FaInfoCircle />
-          More Info
+          {language.moreInfo}
         </button>
       </div>
     </div>

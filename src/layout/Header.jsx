@@ -5,10 +5,13 @@ import { removeUser } from "../redux/slices/userSlice";
 import { auth } from "../utils/firebase";
 import { toggleGptSearch } from "../redux/slices/gptSlice";
 import { SUPPORTED_LANGUAGES } from "../utils/constants";
+import { changeLanguage } from "../redux/slices/configSlice";
+import useLanguage from "../hooks/useLanguage";
 
 const Header = () => {
   const user = useSelector((store) => store.user);
   const dispatch = useDispatch();
+  const language = useLanguage();
 
   const handleSignout = async () => {
     try {
@@ -23,6 +26,10 @@ const Header = () => {
     dispatch(toggleGptSearch());
   };
 
+  const handleChangeLanguage = (e) => {
+    dispatch(changeLanguage(e.target.value));
+  };
+
   return (
     <>
       <div className="absolute flex justify-between items-center px-10 w-full z-10">
@@ -34,9 +41,9 @@ const Header = () => {
             className="px-3 py-1 mr-3 bg-red-600 text-white rounded cursor-pointer hover:bg-red-700"
             onClick={handleGptSearch}
           >
-            GPT Search
+            {language.gptSearch}
           </button>
-          <select className="mr-3 border border-gray-800 bg-gray-800 text-white py-1 px-3 rounded">
+          <select className="mr-3 border border-gray-800 bg-gray-800 text-white py-1 px-3 rounded" onChange={handleChangeLanguage}>
             {SUPPORTED_LANGUAGES.map((lang) => (
               <option key={lang.identifier} value={lang.identifier}>
                 {lang.name}
@@ -51,7 +58,7 @@ const Header = () => {
             className="bg-gray-800 px-3 py-1 text-white rounded cursor-pointer"
             onClick={handleSignout}
           >
-            Sign Out
+            {language.signOut}
           </button>
         </div>
       </div>

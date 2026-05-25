@@ -1,5 +1,5 @@
 export const SUPPORTED_LANGUAGES = [
   { identifier: "en", name: "English" },
-  { identifier: "spanish", name: "Spanish" },
-  { identifier: "french", name: "French" },
+  { identifier: "es", name: "Spanish" },
+  { identifier: "fr", name: "French" },
 ];

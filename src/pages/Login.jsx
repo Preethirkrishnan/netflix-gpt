@@ -43,6 +43,8 @@ const Login = () => {
         user = await signInUser(email.current.value, password.current.value);
       }
 
+      console.log("User details", user);
+
       dispatch(
         addUser({
           uid: user.uid,
